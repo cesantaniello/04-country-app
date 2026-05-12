@@ -3,6 +3,10 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-by-capital-page',
   imports: [],
-  template: `<p>by-capital-page works!</p>`,
+  templateUrl: `./by-capital-page.html`,
 })
-export class ByCapitalPage {}
+export class ByCapitalPage {
+  onSearch(value: string) {
+    console.log({value});
+  }
+}
