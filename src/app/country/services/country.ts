@@ -14,4 +14,14 @@ export class CountryService {
     query = query.toLowerCase();
     return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`);
   }
+
+  searchByCountry(query: string) {
+    query = query.toLowerCase();
+    return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`);
+  }
+
+  searchByRegion(region: string) {
+    region = region.toLowerCase();
+    return this.http.get<RESTCountry[]>(`${API_URL}/region/${region}`);
+  }
 }
