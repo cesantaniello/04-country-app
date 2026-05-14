@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Country } from '../../interfaces/country.interface';
+import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
 
 @Component({
   selector: 'country-list',
@@ -8,5 +8,9 @@ import { Country } from '../../interfaces/country.interface';
 })
 
 export class CountryList {
-  countries = input.required<Country[]>();
+  countries = input.required<RESTCountry[]>();
+
+  getSpanishName(country: RESTCountry): string {
+    return country.translations?.['spa']?.common || country.name.common;
+  }
 }
