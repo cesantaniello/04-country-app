@@ -3,6 +3,7 @@ import { SearchInput } from '../../components/search-input/search-input';
 import { CountryList } from '../../components/country-list/country-list';
 import { CountryService } from '../../services/country';
 import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
+import { Country } from '../../interfaces/country.interface';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -14,7 +15,7 @@ export class ByCapitalPage {
 
   isLoading = signal(false);
   isError = signal<string | null>(null);
-  countries = signal<RESTCountry[]>([]);
+  countries = signal<Country[]>([]);
 
   onSearch(query: string) {
     if (this.isLoading()) return;
@@ -22,15 +23,18 @@ export class ByCapitalPage {
     this.isLoading.set(true);
     this.isError.set(null);
 
-    this.countryService.searchByCapital(query).subscribe(
-      (countries) => {
-        this.isLoading.set(false);
-        this.countries.set(countries);
-      },
-      (error) => {
-        this.isLoading.set(false);
-        this.isError.set('Capital no encontrada');
-      },
+    this.countryService.searchByCapital(query)
+      .subscribe({
+        next: (countries) => {
+          this.isLoading.set(false);
+          this.countries.set(countries);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          this.countries.set([]);
+          this.isError.set('Capital no encontrada');
+        }
+      }
     );
   }
 }
