@@ -1,10 +1,8 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { SearchInput } from '../../components/search-input/search-input';
 import { CountryList } from '../../components/country-list/country-list';
 import { CountryService } from '../../services/country';
 import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
-import { Country } from '../../interfaces/country.interface';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -14,42 +12,33 @@ import { firstValueFrom } from 'rxjs';
 export class ByCapitalPage {
   countryService = inject(CountryService);
   query = signal('');
-
-  countryResource = resource({
-    request: () => ({ query: this.query() }),
-    loader: async({ query }) => {
-      
-      if (!request.query) return [];
-
-      return await firstValueFrom(
-        this.countryService.searchByCapital(request.query)
-      );
-    },
-  })
-/*
+  countries = signal<RESTCountry[]>([]);
   isLoading = signal(false);
-  isError = signal<string | null>(null);
-  countries = signal<Country[]>([]);
+  error = signal<string | null>(null);
 
-  onSearch(query: string) {
-    if (this.isLoading()) return;
-
-    this.isLoading.set(true);
-    this.isError.set(null);
-
-    this.countryService.searchByCapital(query)
-      .subscribe({
-        next: (countries) => {
-          this.isLoading.set(false);
-          this.countries.set(countries);
-        },
-        error: (error) => {
-          this.isLoading.set(false);
-          this.countries.set([]);
-          this.isError.set('Capital no encontrada');
-        }
+  constructor() {
+    effect(() => {
+      const q = this.query();
+      if (!q) {
+        this.countries.set([]);
+        this.error.set(null);
+        return;
       }
-    );
+
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      this.countryService.searchByCapital(q).subscribe({
+        next: (data) => {
+          this.countries.set(data);
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          this.error.set('Capital no encontrada');
+          this.countries.set([]);
+          this.isLoading.set(false);
+        }
+      });
+    });
   }
-*/
 }

@@ -3,9 +3,8 @@
   (value)="query.set($event)"
 />
 
-
-@if (countryResource.error()) {
-  <h3>{{ countryResource.error() }}</h3>
-} @if (countryResource.hasValue()) {
-  <country-list [countries]="countryResource.value()!"/>
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+} @else if (countries().length > 0) {
+  <country-list [countries]="countries()"/>
 }
