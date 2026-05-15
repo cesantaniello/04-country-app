@@ -1,1 +1,10 @@
-<country-list [countries]="[]" />
+<country-search-input
+  placeholder="Buscar por región"
+  (value)="query.set($event)"
+/>
+
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+} @else if (countries().length > 0) {
+  <country-list [countries]="countries()"/>
+}

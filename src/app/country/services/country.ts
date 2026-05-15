@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { RESTCountry } from '../interfaces/rest-countries.interfaces';
-import { catchError, map, Observable, throwError } from 'rxjs';
-import { CountryMapper } from '../mappers/country.mappers';
-import { Country } from '../interfaces/country.interface';
+import { catchError, Observable, throwError } from 'rxjs';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -13,11 +11,10 @@ const API_URL = 'https://restcountries.com/v3.1';
 export class CountryService {
   private http = inject(HttpClient);
 
-  searchByCapital(query: string): Observable<Country[]> {
+  searchByCapital(query: string): Observable<RESTCountry[]> {
     query = query.toLowerCase();
 
     return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`).pipe(
-      map((response) => CountryMapper.mapRestCountryArrayToCountryArray(response)),
       catchError((error) => {
         console.error('Error fetching countries by capital:', error);
         return throwError(() => new Error('Capital no encontrada'));
@@ -25,20 +22,25 @@ export class CountryService {
     );
   }
 
-  searchByCountry(query: string) {
+  searchByCountry(query: string): Observable<RESTCountry[]> {
     query = query.toLowerCase();
 
-    return this.http.get<RESTCountry[]>(url).pipe(
-      map((response) => CountryMapper.mapRestCountryArrayToCountryArray(response)),
+    return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`).pipe(
       catchError((error) => {
-        console.error('Error fetching countries by capital:', error);
-        return throwError(() => new Error('Capital no encontrada'));
+        console.error('Error fetching countries by name:', error);
+        return throwError(() => new Error('País no encontrado'));
       })
     );
   }
 
-  searchByRegion(region: string) {
+  searchByRegion(region: string): Observable<RESTCountry[]> {
     region = region.toLowerCase();
-    return this.http.get<RESTCountry[]>(`${API_URL}/region/${region}`);
+
+    return this.http.get<RESTCountry[]>(`${API_URL}/region/${region}`).pipe(
+      catchError((error) => {
+        console.error('Error fetching countries by region:', error);
+        return throwError(() => new Error('Región no encontrada'));
+      })
+    );
   }
 }
