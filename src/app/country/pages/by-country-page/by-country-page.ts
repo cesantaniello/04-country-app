@@ -15,6 +15,7 @@ export class ByCountryPage {
   countries = signal<RESTCountry[]>([]);
   isLoading = signal(false);
   error = signal<string | null>(null);
+countryResource: any;
 
   constructor() {
     effect(() => {

@@ -29,6 +29,27 @@
           <td><a class="link-primary cursor-pointer">Más información</a></td>
         </tr>
       }
+      @if (errorMessage()) {
+        <tr>
+          <td colspan="8" class="text-center">
+            {{ errorMessage() }}
+          </td>
+        </tr>
+      } @if (countries().length === 0 && !isLoading()) {
+        <tr>
+          <td colspan="8" class="text-center">
+            No se encontraron países.
+          </td>
+        </tr>
+      }
+
+      @if (isLoading()) {
+        <tr>
+          <td colspan="8" class="text-center">
+            Buscano países...
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
 </section>

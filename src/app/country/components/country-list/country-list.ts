@@ -14,4 +14,8 @@ export class CountryList {
   getSpanishName(country: RESTCountry): string {
     return country.translations?.['spa']?.common || country.name.common;
   }
+
+  errorMessage = input<string | unknown | null>();
+  isLoading = input<boolean>(false);
+  isEmpty = input<boolean>(false);
 }
