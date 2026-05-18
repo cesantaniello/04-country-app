@@ -3,7 +3,9 @@
     <span class="loading loading-spinner loading-lg"></span>
   </div>
 } @else if (error()) {
-  <div class="alert alert-error">{{ error() }}</div>
+  <div class="alert alert-error mt-4">
+    <span>{{ error() }}</span>
+  </div>
 } @else if (country()) {
   <div class="card bg-base-100 shadow-xl">
     <figure>
