@@ -26,7 +26,7 @@
               {{ country.population | number }}
             </span>
           </td>
-          <td><a class="link-primary cursor-pointer">Más información</a></td>
+          <td><a class="link-primary cursor-pointer" (click)="viewDetails(country.cca2)">Más información</a></td>
         </tr>
       }
       @if (errorMessage()) {
