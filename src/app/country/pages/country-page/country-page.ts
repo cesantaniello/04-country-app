@@ -2,11 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CountryService } from '../../services/country';
 import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
-import { KeyValuePipe, DecimalPipe } from '@angular/common';
+import { NotFound } from "../../../shared/components/not-found/not-found";
 
 @Component({
   selector: 'app-country-page',
-  imports: [KeyValuePipe, DecimalPipe],
+  imports: [NotFound],
   templateUrl: './country-page.html',
 })
 export class CountryPage implements OnInit {
