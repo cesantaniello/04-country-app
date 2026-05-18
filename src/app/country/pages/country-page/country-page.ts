@@ -3,10 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { CountryService } from '../../services/country';
 import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
 import { NotFound } from "../../../shared/components/not-found/not-found";
+import { CountryInformation } from './country-information/country-information';
 
 @Component({
   selector: 'app-country-page',
-  imports: [NotFound],
+  imports: [NotFound, CountryInformation],
   templateUrl: './country-page.html',
 })
 export class CountryPage implements OnInit {

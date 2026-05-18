@@ -1,9 +1,9 @@
 @if (isLoading()) {
-  <app-not-found />
-} @else if (error()) {
-  <div class="alert alert-error mt-4">
-    <span>{{ error() }}</span>
+  <div class="flex justify-center mt-8">
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
-} @else if (country()) {
-
+} @else if (error() || !country()) {
+  <app-not-found />
+} @else {
+  <country-information [country]="country()!" />
 }
