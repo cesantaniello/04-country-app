@@ -33,6 +33,17 @@ export class CountryService {
     );
   }
 
+    searchCountryByAlphaCode(query: string): Observable<RESTCountry[]> {
+    query = query.toLowerCase();
+
+    return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`).pipe(
+      catchError((error) => {
+        console.error('Error fetching countries by name:', error);
+        return throwError(() => new Error('País no encontrado'));
+      })
+    );
+  }
+
   searchByRegion(region: string): Observable<RESTCountry[]> {
     region = region.toLowerCase();
 
