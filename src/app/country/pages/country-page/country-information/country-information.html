@@ -96,7 +96,7 @@
         <div class="mb-6">
           <p class="text-sm opacity-70 mb-2">Idiomas</p>
           <p>
-            @for (lang of (country().languages | keyvalue); track lang.key) {
+            @for (lang of ($any(country().languages) | keyvalue); track lang.key) {
               @if ($index > 0) {
                 <span>, </span>
               }
