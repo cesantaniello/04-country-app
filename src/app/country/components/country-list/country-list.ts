@@ -1,6 +1,6 @@
 import { Component, input, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
+import { Country } from '../../interfaces/country.interface';
 import { DecimalPipe } from '@angular/common';
 
 @Component({
@@ -10,17 +10,12 @@ import { DecimalPipe } from '@angular/common';
 })
 export class CountryList {
   router = inject(Router);
-  countries = input.required<RESTCountry[]>();
-
-  getSpanishName(country: RESTCountry): string {
-    return country.translations?.['spa']?.common || country.name.common;
-  }
+  countries = input.required<Country[]>();
+  errorMessage = input<string | unknown | null>();
+  isLoading = input<boolean>(false);
+  isEmpty = input<boolean>(false);
 
   viewDetails(code: string) {
     this.router.navigate(['/country/by', code]);
   }
-
-  errorMessage = input<string | unknown | null>();
-  isLoading = input<boolean>(false);
-  isEmpty = input<boolean>(false);
 }

@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { RESTCountry } from '../interfaces/rest-countries.interfaces';
 import { Region } from '../interfaces/region.type';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
+import { Country } from '../interfaces/country.interface';
+import { CountryMapper } from '../mappers/country.mappers';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -11,11 +13,11 @@ const API_URL = 'https://restcountries.com/v3.1';
 })
 export class CountryService {
   private http = inject(HttpClient);
-  private queryCacheCapital = new Map<string, RESTCountry[]>();
-  private queryCacheCountry = new Map<string, RESTCountry[]>();
-  private queryCacheRegion = new Map<string, RESTCountry[]>();
+  private queryCacheCapital = new Map<string, Country[]>();
+  private queryCacheCountry = new Map<string, Country[]>();
+  private queryCacheRegion = new Map<string, Country[]>();
 
-  searchByCapital(query: string): Observable<RESTCountry[]> {
+  searchByCapital(query: string): Observable<Country[]> {
     query = query.toLowerCase();
 
     const cached = this.queryCacheCapital.get(query);
@@ -24,6 +26,7 @@ export class CountryService {
     }
 
     return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`).pipe(
+      map(CountryMapper.mapRestCountryArrayToCountryArray),
       tap((data) => this.queryCacheCapital.set(query, data)),
       catchError((error) => {
         console.error('Error fetching countries by capital:', error);
@@ -32,7 +35,7 @@ export class CountryService {
     );
   }
 
-  searchByCountry(query: string): Observable<RESTCountry[]> {
+  searchByCountry(query: string): Observable<Country[]> {
     query = query.toLowerCase();
 
     const cached = this.queryCacheCountry.get(query);
@@ -41,6 +44,7 @@ export class CountryService {
     }
 
     return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`).pipe(
+      map(CountryMapper.mapRestCountryArrayToCountryArray),
       tap((data) => this.queryCacheCountry.set(query, data)),
       catchError((error) => {
         console.error('Error fetching countries by name:', error);
@@ -60,7 +64,7 @@ export class CountryService {
     );
   }
 
-  searchByRegion(region: Region): Observable<RESTCountry[]> {
+  searchByRegion(region: Region): Observable<Country[]> {
     const key = region.toLowerCase();
 
     const cached = this.queryCacheRegion.get(key);
@@ -69,6 +73,7 @@ export class CountryService {
     }
 
     return this.http.get<RESTCountry[]>(`${API_URL}/region/${key}`).pipe(
+      map(CountryMapper.mapRestCountryArrayToCountryArray),
       tap((data) => this.queryCacheRegion.set(key, data)),
       catchError((error) => {
         console.error('Error fetching countries by region:', error);

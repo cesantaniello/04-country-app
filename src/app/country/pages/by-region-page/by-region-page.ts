@@ -1,7 +1,7 @@
 import { Component, inject, signal, effect } from '@angular/core';
 import { CountryList } from '../../components/country-list/country-list';
 import { CountryService } from '../../services/country';
-import { RESTCountry } from '../../interfaces/rest-countries.interfaces';
+import { Country } from '../../interfaces/country.interface';
 import { Region } from '../../interfaces/region.type';
 
 @Component({
@@ -12,7 +12,7 @@ import { Region } from '../../interfaces/region.type';
 export class ByRegionPage {
   countryService = inject(CountryService);
   selectedRegion = signal<Region | null>(null);
-  countries = signal<RESTCountry[]>([]);
+  countries = signal<Country[]>([]);
   isLoading = signal(false);
   error = signal<string | null>(null);
   regions: Region[] = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania', 'Antarctic'];

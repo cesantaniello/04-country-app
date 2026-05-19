@@ -1,18 +1,19 @@
 import { Country } from '../interfaces/country.interface';
 import { RESTCountry } from '../interfaces/rest-countries.interfaces';
+
 export class CountryMapper {
   static mapRestCountryToCountry(restCountry: RESTCountry): Country {
     return {
-      capital: restCountry.capital?.join(', '),
+      capital: restCountry.capital?.join(', ') ?? '',
       cca2: restCountry.cca2,
       flag: restCountry.flag,
       flagSvg: restCountry.flags.svg,
-      name: restCountry.translations['spa'].common ?? 'Desconocido',
+      name: restCountry.translations?.['spa']?.common ?? restCountry.name.common,
       population: restCountry.population,
     };
   }
 
   static mapRestCountryArrayToCountryArray(restCountries: RESTCountry[]): Country[] {
-    return restCountries.map(this.mapRestCountryToCountry);
+    return restCountries.map(CountryMapper.mapRestCountryToCountry); // ← ESTA LÍNEA
   }
 }
