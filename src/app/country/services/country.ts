@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { RESTCountry } from '../interfaces/rest-countries.interfaces';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -10,11 +10,18 @@ const API_URL = 'https://restcountries.com/v3.1';
 })
 export class CountryService {
   private http = inject(HttpClient);
+  private readonly queryCacheCapital = new Map<string, RESTCountry[]>();
 
   searchByCapital(query: string): Observable<RESTCountry[]> {
     query = query.toLowerCase();
 
+    const cached = this.queryCacheCapital.get(query);
+    if (cached !== undefined) {
+      return of(cached);
+    }
+
     return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`).pipe(
+      tap((data) => this.queryCacheCapital.set(query, data)),
       catchError((error) => {
         console.error('Error fetching countries by capital:', error);
         return throwError(() => new Error('Capital no encontrada'));
